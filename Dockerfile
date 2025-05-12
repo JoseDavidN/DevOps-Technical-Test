@@ -10,6 +10,8 @@ COPY pom.xml .
 COPY mvnw .
 COPY .mvn .mvn
 
+RUN chmod +x mvnw
+
 # Descarga dependencias antes de copiar el código
 RUN ./mvnw dependency:go-offline
 
@@ -17,7 +19,7 @@ RUN ./mvnw dependency:go-offline
 COPY src ./src
 
 # Compila la app y empaqueta
-RUN mvn clean package -DskipTests
+RUN ./mvnw clean package -DskipTests
 
 # ------------------------------------------
 # Imagen liviana para producción
