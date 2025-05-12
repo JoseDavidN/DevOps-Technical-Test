@@ -1,0 +1,73 @@
+name: Pipeline CI/CD
+description: |
+    Este flujo de trabajo de GitHub Actions se encarga de compilar una aplicación Java utilizando Maven y luego construir y subir una imagen Docker a Docker Hub.
+    Se ejecuta en cada push o pull request a la rama principal.
+    Usa variables de entorno llamadas DOCKERHUB_USERNAME y DOCKERHUB_TOKEN en los secretos del repositorio para subir la imagen docker a Docker Hub.
+    También se usa un archivo Dockerfile en la raíz del repositorio para construir la imagen Docker.
+    El flujo de trabajo se divide en dos trabajos: uno para la construcción de la aplicación Java y otro para la construcción y subida de la imagen Docker.
+    El primer trabajo compila la aplicación y sube el artefacto JAR, mientras que la segunda trabajo descarga el artefacto, construye la imagen Docker y la sube a Docker Hub.
+
+on:
+    push:
+        branches: ['main']
+    pull_request:
+        branches: ['main']
+
+env:
+    IMAGE_NAME: jose-gomez:v1.0
+
+jobs:
+    build:
+        name: Compilacion de la Aplicación Java
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up JDK 17
+              uses: actions/setup-java@v4
+              with:
+                  java-version: '17'
+                  distribution: 'temurin'
+
+            - name: Compilar con Maven
+              run: mvn clean package -DskipTests
+
+            - name: Upload JAR artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: java-app
+                  path: target/*.jar
+
+    docker:
+        name: Compilacion y subida de la imagen Docker
+        needs: build
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Descargar artefacto JAR
+              uses: actions/download-artifact@v4
+              with:
+                  name: java-app
+                  path: target
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+
+            - name: Login en Docker Hub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            - name: Compilar y subir imagen Docker
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  file: ./Dockerfile
+                  push: true
+                  tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
