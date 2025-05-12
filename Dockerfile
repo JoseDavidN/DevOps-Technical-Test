@@ -8,11 +8,8 @@ WORKDIR /app
 # Copiamos todo el proyecto
 COPY . .
 
-# Aseguramos permisos del wrapper
-RUN chmod +x mvnw
-
 # Compilamos el proyecto y empaquetamos (sin tests)
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -U -DskipTests
 
 # ------------------------------------------
 # Imagen liviana para producción
