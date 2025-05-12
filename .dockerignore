@@ -1,0 +1,20 @@
+# Evitar copiar la carpeta .git
+.git
+.gitignore
+
+# Maven: carpetas y archivos generados
+target/
+pom.xml.versionsBackup
+dependency-reduced-pom.xml
+
+# Archivos que no deben ir en la imagen
+*.md
+*.log
+*.iml
+*.idea/
+.vscode/
+.DS_Store
+.env
+
+# Innesesario dentro del contenedor
+.mvn/wrapper/maven-wrapper.jar
