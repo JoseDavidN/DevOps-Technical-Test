@@ -6,10 +6,9 @@ FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
 # Cache eficiente de dependencias
-COPY pom.xml .
 COPY mvnw .
 COPY .mvn .mvn
-
+COPY pom.xml .
 RUN chmod +x mvnw
 
 # Descarga dependencias antes de copiar el código
