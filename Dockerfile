@@ -36,7 +36,7 @@ ARG GIT_COMMIT=unknown
 
 # Metadata de la imagen importante para trazabilidad e inspección
 LABEL maintainer="Jose Gomez <gomezjosedavid997@gmail.com>" \
-      org.opencontainers.image.title="Grafana App"
+      org.opencontainers.image.title="Grafana App" \
       org.opencontainers.image.source="https://github.com/JoseDavidN/DevOps-Technical-Test" \
       org.opencontainers.image.version="${APP_VERSION}" \
       org.opencontainers.image.revision="${GIT_COMMIT}" \
