@@ -5,19 +5,13 @@ FROM maven:3.9.6-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-# Cache eficiente de dependencias
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
+# Copiamos todo el proyecto
+COPY . .
+
+# Aseguramos permisos del wrapper
 RUN chmod +x mvnw
 
-# Descarga dependencias antes de copiar el código
-RUN ./mvnw dependency:go-offline
-
-# copiamos el resto del código fuente
-COPY src ./src
-
-# Compila la app y empaqueta
+# Compilamos el proyecto y empaquetamos (sin tests)
 RUN ./mvnw clean package -DskipTests
 
 # ------------------------------------------
