@@ -17,7 +17,7 @@ RUN ./mvnw dependency:go-offline
 COPY src ./src
 
 # Compila la app y empaqueta
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
 
 # ------------------------------------------
 # Imagen liviana para producción
