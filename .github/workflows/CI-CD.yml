@@ -17,7 +17,8 @@ permissions:
     contents: read
 
 env:
-    IMAGE_NAME: jose-gomez:v1.0
+    IMAGE_NAME: jose-gomez
+    IMAGE_VERSION: V1.0
     REGISTRY: docker.io
     DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -90,4 +91,4 @@ jobs:
 
             - name: Subir imagen Docker a Docker Hub
               run: |
-                docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+                docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
